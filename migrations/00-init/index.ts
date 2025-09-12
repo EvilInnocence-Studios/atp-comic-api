@@ -39,7 +39,7 @@ export const init:IMigration = {
     order: 0,
     down: () => db.schema
         .dropTableIfExists("comicPageCharacters")
-        .dropTableIfExists("comicPageCommentary")
+        .dropTableIfExists("comicPageCommentaries")
         .dropTableIfExists("comicPages")
         .dropTableIfExists("comicCharacterAttributes")
         .dropTableIfExists("comicCharacters")
@@ -49,7 +49,7 @@ export const init:IMigration = {
         .createTable("comicCharacters", charactersTable)
         .createTable("comicCharacterAttributes", characterAttributesTable)
         .createTable("comicPages", pagesTable)
-        .createTable("comicPageCommentary", pageCommentaryTable)
+        .createTable("comicPageCommentaries", pageCommentaryTable)
         .createTable("comicPageCharacters", pageCharactersTable),
     initData: async () => {
         await insertPermissions(db, permissions);
