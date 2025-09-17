@@ -3,8 +3,8 @@ import { Knex } from "knex";
 export const arcsTable = (t:Knex.CreateTableBuilder) => {
     t.bigIncrements();
     t.string("name", 255).notNullable();
-    t.string("url", 255).notNullable().unique();
-    t.bigInteger("parentId").unsigned().references("comicArcs.id").onDelete("SET NULL");
+    t.string("url", 255).nullable().unique();
+    t.bigInteger("parentId").unsigned().references("comicArcs.id").onDelete("SET NULL").nullable();
     t.integer("sortOrder").notNullable().defaultTo(0);
     t.boolean("enabled").notNullable().defaultTo(false);
     t.string("thumbnailUrl").nullable();
@@ -32,13 +32,13 @@ export const characterAttributesTable = (t:Knex.CreateTableBuilder) => {
 export const pagesTable = (t:Knex.CreateTableBuilder) => {
     t.bigIncrements();
     t.string("name", 255).notNullable();
-    t.string("url", 255).notNullable().unique();
+    t.string("url", 255).nullable().unique();
     t.bigInteger("arcId").notNullable();
     t.integer("sortOrder").notNullable().defaultTo(0);
     t.string("imageUrl").nullable();
     t.text("transcript").nullable();
     t.boolean("enabled").notNullable().defaultTo(false);
-    t.date("postDate");
+    t.date("postDate").nullable();
 }
 
 export const pageCommentaryTable = (t:Knex.CreateTableBuilder) => {

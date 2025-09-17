@@ -34,7 +34,7 @@ class ArcHandlerClass {
 
     @CheckPermissions("comicArc.update")
     public sort (...args:HandlerArgs<{newIndex: string, arcId: string}>):Promise<IComicArc[]> {
-        return pipeTo(Arc.sort, getParam("arcId"), getBodyParam("arcId"), getBodyParam("newIndex"))(args);
+        return pipeTo(Arc.sort, getParam("arcId"), getBodyParam("childArcId"), getBodyParam("newIndex"))(args);
     }
 
     @CheckPermissions("comicArc.update")
