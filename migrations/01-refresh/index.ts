@@ -71,25 +71,27 @@ export const refreshData:IMigration = {
         }
 
         // Get the media upload folder
-        const folder = "media/comics"; // await Setting.get("comicMediaFolder");
+        // const folder = "media/comics";
+        const folder = await Setting.get("comicMediaFolder");
 
         // Upload the arc images to S3 in the correct folder
         if(uploadArcMedia) {
             for(const arc of await Arc.search({})) {
                 if(arc.thumbnailUrl) {
                     console.log("Uploading thumbnail for arc", arc.name, arc.thumbnailUrl);
-                    const fileData = readFileSync(`./_data/media/${arc.thumbnailUrl}`);
-                    // Convert to a File object
-                    const file = new File([fileData], arc.thumbnailUrl, {type: "image/jpeg"});
-
-                    await uploadMedia(folder, file);
+                    const data = readFileSync(`./_data/media/${arc.thumbnailUrl}`);
+                    await uploadMedia(folder, {
+                        data,
+                        name: arc.thumbnailUrl,
+                    }, {skipExisting: true});
                 }
                 if(arc.bannerUrl) {
                     console.log("Uploading banner for arc", arc.name, arc.bannerUrl);
-                    const fileData = readFileSync(`./_data/media/${arc.bannerUrl}`);
-                    // Convert to a File object
-                    const file = new File([fileData], arc.bannerUrl, {type: "image/jpeg"});
-                    await uploadMedia(folder, file);
+                    const data = readFileSync(`./_data/media/${arc.bannerUrl}`);
+                    await uploadMedia(folder, {
+                        data,
+                        name: arc.bannerUrl,
+                    }, {skipExisting: true});
                 }
             }
         }
@@ -136,10 +138,11 @@ export const refreshData:IMigration = {
             for(const page of await Page.search({})) {
                 if(page.imageUrl) {
                     console.log("Uploading image for page", page.name, page.imageUrl);
-                    const fileData = readFileSync(`./_data/media/${page.imageUrl}`);
-                    // Convert to a File object
-                    const file = new File([fileData], page.imageUrl, {type: "image/jpeg"});
-                    await uploadMedia(folder, file);
+                    const data = readFileSync(`./_data/media/${page.imageUrl}`);
+                    await uploadMedia(folder, {
+                        data,
+                        name: page.imageUrl,
+                    }, {skipExisting: true});
                 }
             }
         }

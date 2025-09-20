@@ -4,7 +4,7 @@ import { PageHandlers } from "./handlers";
 export const PageEndpoints = {
     page: {
         GET: get(PageHandlers.search),
-        POST: upload(PageHandlers.create),
+        POST: post(PageHandlers.create),
         ":pageId": {
             GET: get(PageHandlers.get),
             PATCH: patch(PageHandlers.update),

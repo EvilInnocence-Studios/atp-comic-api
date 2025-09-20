@@ -7,62 +7,62 @@ import { CheckPermissions } from "../../uac/permission/util";
 import { Character } from "./services";
 
 class CharacterHandlerClass {
-    @CheckPermissions("character.view")
+    @CheckPermissions("comicCharacter.view")
     public search (...args:HandlerArgs<Query>):Promise<IComicCharacter[]> {
         return pipeTo(Character.search, getBody<Query>)(args);
     }
 
-    @CheckPermissions("character.view")
+    @CheckPermissions("comicCharacter.view")
     public get (...args:HandlerArgs<undefined>):Promise<IComicCharacter> {
         return pipeTo(Character.loadById, getParam("characterId"))(args);
     }
 
-    @CheckPermissions("character.update")
+    @CheckPermissions("comicCharacter.update")
     public update (...args:HandlerArgs<Partial<IComicCharacter>>):Promise<IComicCharacter> {
         return pipeTo(Character.update, getParam("characterId"), getBody<Partial<IComicCharacter>>)(args);
     }
 
-    @CheckPermissions("character.update")
+    @CheckPermissions("comicCharacter.update")
     public replaceImage (...args:HandlerArgs<Partial<IComicCharacter>>):Promise<IComicCharacter> {
         return pipeTo(Character.thumbnail.replace, getParam("characterId"), getFile)(args);
     }
 
-    @CheckPermissions("character.update")
+    @CheckPermissions("comicCharacter.update")
     public removeImage (...args:HandlerArgs<undefined>):Promise<any> {
         return pipeTo(Character.thumbnail.remove, getParam("characterId"))(args);
     }
 
-    @CheckPermissions("character.delete")
+    @CheckPermissions("comicCharacter.delete")
     public remove (...args:HandlerArgs<undefined>):Promise<null> {
         return pipeTo(Character.remove, getParam("characterId"))(args);
     }
 
-    @CheckPermissions("character.create")
+    @CheckPermissions("comicCharacter.create")
     public create (...args:HandlerArgs<NewComicCharacter>):Promise<IComicCharacter> {
         return pipeTo(Character.create, getBody<NewComicCharacter>)(args);
     }
 
-    @CheckPermissions("character.view")
+    @CheckPermissions("comicCharacter.view")
     public searchAttributes (...args:HandlerArgs<Query>):Promise<ICharacterAttribute[]> {
         return pipeTo(Character.attributes.search, getParamsAndBody)(args);
     }
 
-    @CheckPermissions("character.update")
+    @CheckPermissions("comicCharacter.update")
     public addAttribute (...args:HandlerArgs<NewCharacterAttribute>):Promise<ICharacterAttribute> {
         return pipeTo(Character.attributes.create, getParamsAndBody)(args);
     }
 
-    @CheckPermissions("character.update")
+    @CheckPermissions("comicCharacter.update")
     public updateAttribute (...args:HandlerArgs<Partial<ICharacterAttribute>>):Promise<ICharacterAttribute> {
         return pipeTo(Character.attributes.update, getParam("attributeId"), getBody<Partial<ICharacterAttribute>>)(args);
     }
 
-    @CheckPermissions("character.update")
+    @CheckPermissions("comicCharacter.update")
     public removeAttribute (...args:HandlerArgs<undefined>):Promise<null> {
         return pipeTo(Character.attributes.remove, getParam("attributeId"))(args);
     }
 
-    @CheckPermissions("character.update")
+    @CheckPermissions("comicCharacter.update")
     public sort (...args:HandlerArgs<{characterId: string, newIndex: string}>):Promise<IComicCharacter[]> {
         return pipeTo(Character.sort, getBodyParam("characterId"), getBodyParam("newIndex"))(args);
     }
