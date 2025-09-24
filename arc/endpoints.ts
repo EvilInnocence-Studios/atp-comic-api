@@ -4,7 +4,7 @@ import { ArcHandlers } from "./handlers";
 export const ArcEndpoints = {
     arc: {
         GET: get(ArcHandlers.search),
-        POST: upload(ArcHandlers.create),
+        POST: post(ArcHandlers.create),
         ":arcId": {
             GET: get(ArcHandlers.get),
             PATCH: patch(ArcHandlers.update),

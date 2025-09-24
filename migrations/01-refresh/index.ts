@@ -71,8 +71,8 @@ export const refreshData:IMigration = {
         }
 
         // Get the media upload folder
-        // const folder = "media/comics";
-        const folder = await Setting.get("comicMediaFolder");
+        const folder = "media/comics";
+        // const folder = await Setting.get("comicMediaFolder");
 
         // Upload the arc images to S3 in the correct folder
         if(uploadArcMedia) {
