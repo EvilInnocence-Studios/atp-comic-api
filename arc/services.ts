@@ -9,7 +9,7 @@ const ArcBasic = basicCrudService<IComicArc>("comicArcs");
 export const Arc = {
     ...ArcBasic,
     sort: async (parentId:string, arcId: string, newIndex: string):Promise<IComicArc[]> => {
-        await reorder("comicArcs", arcId, newIndex, {parentId});
+        await reorder("comicArcs", arcId, newIndex, {parentId}, "sortOrder");
         return await Arc.search({parentId});
     },
     thumbnail: optionalMediaService<IComicArc>({
