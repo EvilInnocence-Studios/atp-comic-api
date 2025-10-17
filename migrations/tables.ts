@@ -16,6 +16,8 @@ export const charactersTable = (t:Knex.CreateTableBuilder) => {
     t.bigIncrements();
     t.string("name", 255).notNullable().unique();
     t.string("imageUrl").nullable();
+    t.string("thumbnailUrl").nullable();
+    t.boolean("enabled").notNullable().defaultTo(false);
     t.smallint("sortOrder").notNullable().defaultTo(0);
     t.text("bio").nullable();
 }
