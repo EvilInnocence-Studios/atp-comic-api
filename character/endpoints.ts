@@ -6,6 +6,9 @@ export const CharacterEndpoints = {
     character: {
         GET: get(CharacterHandler.search),
         POST: upload(CharacterHandler.create),
+        sort: {
+            POST: post(CharacterHandler.sort),
+        },
         ":characterId": {
             GET: get(CharacterHandler.get),
             PATCH: patch(CharacterHandler.update),
@@ -13,9 +16,6 @@ export const CharacterEndpoints = {
             image: {
                 POST: upload(CharacterHandler.replaceImage),
                 DELETE: del(CharacterHandler.removeImage),
-            },
-            sort: {
-                POST: post(CharacterHandler.sort),
             },
             attribute: {
                 GET: get(CharacterHandler.searchAttributes),

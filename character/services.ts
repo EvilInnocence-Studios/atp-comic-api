@@ -17,7 +17,7 @@ export const Character = {
     }),
     attributes: basicCrudService<ICharacterAttribute>("comicCharacterAttributes"),
     sort: async (characterId: string, newIndex: string):Promise<IComicCharacter[]> => {
-        await reorder("comicCharacters", characterId, newIndex, {});
+        await reorder("comicCharacters", characterId, newIndex, {}, "sortOrder");
         return await CharacterBasic.search({});
     }
 }
