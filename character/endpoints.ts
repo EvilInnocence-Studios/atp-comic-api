@@ -13,9 +13,17 @@ export const CharacterEndpoints = {
             GET: get(CharacterHandler.get),
             PATCH: patch(CharacterHandler.update),
             DELETE: del(CharacterHandler.remove),
-            image: {
-                POST: upload(CharacterHandler.replaceImage),
-                DELETE: del(CharacterHandler.removeImage),
+            media: {
+                GET: get(CharacterHandler.getMedia),
+                POST: upload(CharacterHandler.addMedia),
+                ":mediaId": {
+                    GET: get(CharacterHandler.getOneMedia),
+                    PATCH: patch(CharacterHandler.updateMedia),
+                    DELETE: del(CharacterHandler.removeMedia),
+                },
+                sort: {
+                    POST: post(CharacterHandler.sortMedia),
+                }
             },
             attribute: {
                 GET: get(CharacterHandler.searchAttributes),
@@ -23,6 +31,9 @@ export const CharacterEndpoints = {
                 ":attributeId": {
                     PATCH: patch(CharacterHandler.updateAttribute),
                     DELETE: del(CharacterHandler.removeAttribute),
+                },
+                sort: {
+                    POST: post(CharacterHandler.sortAttributes),
                 }
             },
         }

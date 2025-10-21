@@ -15,12 +15,21 @@ export const arcsTable = (t:Knex.CreateTableBuilder) => {
 export const charactersTable = (t:Knex.CreateTableBuilder) => {
     t.bigIncrements();
     t.string("name", 255).notNullable().unique();
-    t.string("imageUrl").nullable();
-    t.string("thumbnailUrl").nullable();
+    t.bigInteger("thumbnailId").unsigned();
+    t.bigInteger("mainImageId").unsigned();
     t.boolean("enabled").notNullable().defaultTo(false);
     t.smallint("sortOrder").notNullable().defaultTo(0);
     t.text("bio").nullable();
 }
+
+export const characterMediaTable = (t:Knex.CreateTableBuilder) => {
+    t.bigIncrements();
+    t.bigInteger("characterId").unsigned().notNullable().references("comicCharacters.id").onDelete("CASCADE");
+    t.string("url", 255).notNullable();
+    t.text("caption");
+    t.integer("order");
+    t.unique(["characterId", "url"]);
+};
 
 export const characterAttributesTable = (t:Knex.CreateTableBuilder) => {
     t.bigIncrements();
