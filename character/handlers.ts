@@ -91,6 +91,11 @@ class CharacterHandlerClass {
     public sortMedia (...args:HandlerArgs<Query>):Promise<any> {
         return pipeTo(Character.media.sort, getParam("characterId"), getBody)(args);
     }
+
+    @CheckPermissions("comicCharacter.view")
+    public getPages (...args:HandlerArgs<undefined>):Promise<string[]> {
+        return pipeTo(Character.pages, getParam("characterId"))(args);
+    }
 }
 
 export const CharacterHandler = new CharacterHandlerClass();

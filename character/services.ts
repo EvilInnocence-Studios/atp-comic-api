@@ -14,13 +14,15 @@ const mediaFolder = () => Setting.get("comicMediaFolder");
 
 export const Character = {
     ...CharacterBasic,
-    thumbnail: optionalMediaService<IComicCharacter>({
-        dbTable: "comicCharacters",
-        mediaColumn: "imageUrl",
-        getFolder: () => Setting.get("comicMediaFolder"),
-        getEntity: CharacterBasic.loadById,
-        getFileName: (character:IComicCharacter) => character.imageUrl,
-    }),
+    pages: (characterId: string):Promise<string[]> => {
+        return db("comicPages")
+            .join("comicPageCharacters", "comicPages.id", "comicPageCharacters.pageId")
+            .where("comicPageCharacters.characterId", characterId)
+            .where("comicPages.enabled", true)
+            .select("comicPages.id as id")
+            .orderBy("comicPages.sortOrder", "asc")
+            .then(rows => rows.map(r => r.id));
+    },
     attributes: {
         ...basicCrudService<ICharacterAttribute>("comicCharacterAttributes"),
         sort: async (characterId: string, attributeId:string, newIndex: string):Promise<ICharacterAttribute[]> => {

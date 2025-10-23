@@ -36,6 +36,9 @@ export const CharacterEndpoints = {
                     POST: post(CharacterHandler.sortAttributes),
                 }
             },
+            pages: {
+                GET: get(CharacterHandler.getPages),
+            }
         }
     }
 }
