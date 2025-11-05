@@ -18,6 +18,7 @@ export const charactersTable = (t:Knex.CreateTableBuilder) => {
     t.bigInteger("thumbnailId").unsigned();
     t.bigInteger("mainImageId").unsigned();
     t.boolean("enabled").notNullable().defaultTo(false);
+    t.boolean("showDetails").notNullable().defaultTo(false);
     t.smallint("sortOrder").notNullable().defaultTo(0);
     t.text("bio").nullable();
 }
