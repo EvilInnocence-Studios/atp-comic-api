@@ -2,10 +2,11 @@ import { IComicPage, IComicPageCommentary, NewComicPage } from "src/comic-shared
 import { pipeTo } from "ts-functional";
 import { IComicCharacter } from "../../comic-shared/character/types";
 import { Query } from "../../core-shared/express/types";
-import { getBody, getBodyParam, getFile, getParam, getParamsAndBody } from "../../core/express/extractors";
+import { getBody, getBodyParam, getFile, getParam, getParamsAndBody, getQueryParam } from "../../core/express/extractors";
 import { HandlerArgs } from "../../core/express/types";
 import { CheckPermissions } from "../../uac/permission/util";
 import { Page } from "./services";
+import { getPresignedUploadUrl } from "../../core/s3Uploads";
 
 class PageHandlerClass {
     @CheckPermissions("comicPage.view")
@@ -87,6 +88,11 @@ class PageHandlerClass {
     public removeImage (...args:HandlerArgs<undefined>):Promise<any> {
         return pipeTo(Page.image.remove, getParam("pageId"))(args);
     }
+
+    @CheckPermissions("comicPage.update")
+    public getUploadUrl (...args:HandlerArgs<Query>):Promise<string> {
+        return pipeTo(getPresignedUploadUrl, getQueryParam("path"))(args);
+    }    
 }
 
 export const PageHandlers = new PageHandlerClass();

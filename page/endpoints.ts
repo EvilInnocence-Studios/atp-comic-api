@@ -5,6 +5,9 @@ export const PageEndpoints = {
     page: {
         GET: get(PageHandlers.search),
         POST: post(PageHandlers.create),
+        uploadUrl: {
+            GET: get(PageHandlers.getUploadUrl),
+        },
         ":pageId": {
             GET: get(PageHandlers.get),
             PATCH: patch(PageHandlers.update),
