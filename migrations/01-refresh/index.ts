@@ -101,7 +101,7 @@ export const refreshData:IMigration = {
         const characterIdMap: Record<string, string> = {};
         for(const character of characterData) {
             const {id, name} = character;
-            const newCharacter:NewComicCharacter = {name, imageUrl: null, thumbnailUrl: null, enabled: false, sortOrder: 0, bio: null};
+            const newCharacter:NewComicCharacter = {name, mainImageId: null, thumbnailId: null, enabled: false, sortOrder: 0, bio: null, showDetails: false};
             const createdCharacter = await Character.create(newCharacter);
             characterIdMap[`${id}`] = createdCharacter.id;
         }
