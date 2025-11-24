@@ -1,7 +1,7 @@
 import { insertPermissions, insertRolePermissions, insertRoles } from "../../../uac/migrations/util";
 import { database } from "../../../core/database";
 import { IMigration } from "../../../core/dbMigrations";
-import { arcsTable, charactersTable, pageCharactersTable, pageCommentaryTable, pagesTable, characterAttributesTable } from "../tables";
+import { arcsTable, charactersTable, pageCharactersTable, pageCommentaryTable, pagesTable, characterAttributesTable, characterMediaTable } from "../tables";
 
 const db = database();
 
@@ -42,12 +42,14 @@ export const init:IMigration = {
         .dropTableIfExists("comicPageCommentaries")
         .dropTableIfExists("comicPages")
         .dropTableIfExists("comicCharacterAttributes")
+        .dropTableIfExists("comicCharacterMedia")
         .dropTableIfExists("comicCharacters")
         .dropTableIfExists("comicArcs"),
     up: () => db.schema
         .createTable("comicArcs", arcsTable)
         .createTable("comicCharacters", charactersTable)
         .createTable("comicCharacterAttributes", characterAttributesTable)
+        .createTable("comicCharacterMedia", characterMediaTable)
         .createTable("comicPages", pagesTable)
         .createTable("comicPageCommentaries", pageCommentaryTable)
         .createTable("comicPageCharacters", pageCharactersTable),
