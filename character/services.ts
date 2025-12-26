@@ -1,10 +1,9 @@
-import { IFile, removeMedia, uploadMedia } from "../../core/s3Uploads";
 import { ICharacterAttribute, ICharacterMedia, IComicCharacter } from "../../comic-shared/character/types";
 import { Setting } from "../../common/setting/service";
-import { basicCrudService } from "../../core/express/service/common";
-import { optionalMediaService } from "../../core/express/service/media";
-import { reorder } from "../../core/express/util";
 import { database } from "../../core/database";
+import { basicCrudService } from "../../core/express/service/common";
+import { reorder } from "../../core/express/util";
+import { IFile, removeMedia, uploadMedia } from "../../core/s3Uploads";
 
 const db = database();
 
