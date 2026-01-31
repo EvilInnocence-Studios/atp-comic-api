@@ -7,9 +7,11 @@ export const arcsTable = (t:Knex.CreateTableBuilder) => {
     t.bigInteger("parentId").unsigned().references("comicArcs.id").onDelete("SET NULL").nullable();
     t.smallint("sortOrder").notNullable().defaultTo(0);
     t.boolean("enabled").notNullable().defaultTo(false);
+    t.boolean("isVerticalScroll").notNullable().defaultTo(false);
     t.string("thumbnailUrl").nullable();
     t.string("bannerUrl").nullable();
     t.text("summary").nullable();
+    t.text("transcript").nullable();
 };
 
 export const charactersTable = (t:Knex.CreateTableBuilder) => {

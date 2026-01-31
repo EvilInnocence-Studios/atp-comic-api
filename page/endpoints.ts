@@ -8,6 +8,12 @@ export const PageEndpoints = {
         uploadUrl: {
             GET: get(PageHandlers.getUploadUrl),
         },
+        // enableAll: {
+        //     POST: post(PageHandlers.enableAll),
+        // },
+        // disableAll: {
+        //     POST: post(PageHandlers.disableAll),
+        // },
         ":pageId": {
             GET: get(PageHandlers.get),
             PATCH: patch(PageHandlers.update),
