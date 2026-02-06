@@ -39,15 +39,15 @@ class PageHandlerClass {
         return pipeTo(Page.sort, getBodyParam("arcId"), getParam("pageId"), getBodyParam("newIndex"))(args);
     }
 
-    // @CheckPermissions("comicPage.update")
-    // public enableAll (...args:HandlerArgs<undefined>):Promise<IComicPage[]> {
-    //     return pipeTo(Page.enableAll, getParam("arcId"))(args);
-    // }
+    @CheckPermissions("comicPage.update")
+    public enableAll (...args:HandlerArgs<{arcId: string}>):Promise<IComicPage[]> {
+        return pipeTo(Page.enableAll, getBodyParam("arcId"))(args);
+    }
 
-    // @CheckPermissions("comicPage.update")
-    // public disableAll (...args:HandlerArgs<undefined>):Promise<IComicPage[]> {
-    //     return pipeTo(Page.disableAll, getParam("arcId"))(args);
-    // }
+    @CheckPermissions("comicPage.update")
+    public disableAll (...args:HandlerArgs<{arcId: string}>):Promise<IComicPage[]> {
+        return pipeTo(Page.disableAll, getBodyParam("arcId"))(args);
+    }
 
     @CheckPermissions("comicPage.update")
     public addCharacter (...args:HandlerArgs<{characterId: string}>):Promise<any> {
