@@ -33,10 +33,10 @@ const rolePermissions = [
 ];
 
 export const init: IMigration = {
-    name: "init-comic-module",
+    name: "init",
     module: "comic",
     description: "Initial data for comic module",
-    order: 1,
+    order: 2,
     down: () => db.schema
         .dropTableIfExists("comicPageCharacters")
         .dropTableIfExists("comicPageCommentaries")
