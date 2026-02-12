@@ -1,6 +1,6 @@
-import { setupMigrations as comicSetup } from "./migrations";
+import { init } from "./migrations/00-init";
 
-export {apiConfig} from "./endpoints";
+export { apiConfig } from "./endpoints";
 
-export const migrations = [];
-export const setupMigrations = comicSetup;
+export const migrations = [init];
+export const setupMigrations = [init];

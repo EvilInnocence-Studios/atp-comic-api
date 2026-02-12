@@ -36,6 +36,7 @@ export const init: IMigration = {
     name: "init",
     module: "comic",
     description: "Initial data for comic module",
+    version: "1.0.0",
     order: 2,
     down: () => db.schema
         .dropTableIfExists("comicPageCharacters")
