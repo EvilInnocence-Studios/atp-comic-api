@@ -12,6 +12,7 @@ export const arcsTable = (t:Knex.CreateTableBuilder) => {
     t.string("bannerUrl").nullable();
     t.text("summary").nullable();
     t.text("transcript").nullable();
+    t.date("postDate").nullable();
 };
 
 export const charactersTable = (t:Knex.CreateTableBuilder) => {
