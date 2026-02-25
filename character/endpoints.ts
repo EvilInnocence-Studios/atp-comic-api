@@ -5,7 +5,7 @@ import { CharacterHandler } from "./handlers";
 export const CharacterEndpoints = {
     character: {
         GET: get(CharacterHandler.search),
-        POST: upload(CharacterHandler.create),
+        POST: post(CharacterHandler.create),
         sort: {
             POST: post(CharacterHandler.sort),
         },
