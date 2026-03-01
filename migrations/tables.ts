@@ -71,3 +71,10 @@ export const pageCharactersTable = (t:Knex.CreateTableBuilder) => {
     t.bigInteger("characterId").unsigned().notNullable().references("comicCharacters.id").onDelete("CASCADE");
     t.unique(["pageId", "characterId"]);
 }
+
+export const arcCharactersTable = (t:Knex.CreateTableBuilder) => {
+    t.bigIncrements();
+    t.bigInteger("arcId").unsigned().notNullable().references("comicArcs.id").onDelete("CASCADE");
+    t.bigInteger("characterId").unsigned().notNullable().references("comicCharacters.id").onDelete("CASCADE");
+    t.unique(["arcId", "characterId"]);
+}

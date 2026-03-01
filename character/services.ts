@@ -13,7 +13,7 @@ const mediaFolder = () => Setting.get("comicMediaFolder");
 
 export const Character = {
     ...CharacterBasic,
-    pages: (characterId: string):Promise<string[]> => {
+    pages: (characterId: string): Promise<string[]> => {
         return db("comicPages")
             .join("comicPageCharacters", "comicPages.id", "comicPageCharacters.pageId")
             .where("comicPageCharacters.characterId", characterId)
@@ -22,20 +22,29 @@ export const Character = {
             .orderBy("comicPages.sortOrder", "asc")
             .then(rows => rows.map(r => r.id));
     },
+    arcs: (characterId: string): Promise<string[]> => {
+        return db("comicArcs")
+            .join("comicArcCharacters", "comicArcs.id", "comicArcCharacters.arcId")
+            .where("comicArcCharacters.characterId", characterId)
+            .where("comicArcs.enabled", true)
+            .select("comicArcs.id as id")
+            .orderBy("comicArcs.sortOrder", "asc")
+            .then(rows => rows.map(r => r.id));
+    },
     attributes: {
         ...basicCrudService<ICharacterAttribute>("comicCharacterAttributes"),
-        sort: async (characterId: string, attributeId:string, newIndex: string):Promise<ICharacterAttribute[]> => {
-            await reorder("comicCharacterAttributes", attributeId, newIndex, {characterId}, "sortOrder");
+        sort: async (characterId: string, attributeId: string, newIndex: string): Promise<ICharacterAttribute[]> => {
+            await reorder("comicCharacterAttributes", attributeId, newIndex, { characterId }, "sortOrder");
             return await Character.attributes.search({});
         },
     },
-    sort: async (characterId: string, newIndex: string):Promise<IComicCharacter[]> => {
+    sort: async (characterId: string, newIndex: string): Promise<IComicCharacter[]> => {
         await reorder("comicCharacters", characterId, newIndex, {}, "sortOrder");
         return await CharacterBasic.search({});
     },
     media: {
         ...basicCrudService<ICharacterMedia>("comicCharacterMedia", "url"),
-        upload: async (characterId: number, file: IFile):Promise<ICharacterMedia> => {
+        upload: async (characterId: number, file: IFile): Promise<ICharacterMedia> => {
             // Upload file to S3
             uploadMedia(await mediaFolder() + `/${characterId}`, file);
 
@@ -46,8 +55,8 @@ export const Character = {
                 .onConflict(["characterId", "url"]).ignore();
             return newMedia;
         },
-        remove: async (characterId: number, mediaId: string):Promise<null> => {
-            const media:ICharacterMedia = await Character.media.loadById(mediaId);
+        remove: async (characterId: number, mediaId: string): Promise<null> => {
+            const media: ICharacterMedia = await Character.media.loadById(mediaId);
 
             // Remove file from S3
             await removeMedia(await mediaFolder() + `/${characterId}`, media.url);
@@ -57,7 +66,7 @@ export const Character = {
 
             return null;
         },
-        sort: async (characterId: number, {id, newIndex}:{id: string, newIndex: string}):Promise<ICharacterMedia[]> => {
+        sort: async (characterId: number, { id, newIndex }: { id: string, newIndex: string }): Promise<ICharacterMedia[]> => {
             await reorder("comicCharacterMedia", id, newIndex, { characterId });
             return await Character.media.search({ characterId });
         },

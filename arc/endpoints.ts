@@ -20,6 +20,13 @@ export const ArcEndpoints = {
             sort: {
                 POST: post(ArcHandlers.sort),
             },
+            character: {
+                GET: get(ArcHandlers.getCharacters),
+                POST: post(ArcHandlers.addCharacter),
+                ":characterId": {
+                    DELETE: del(ArcHandlers.removeCharacter),
+                },
+            },
         }
     }
 }

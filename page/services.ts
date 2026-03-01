@@ -1,3 +1,4 @@
+import { IComicArc } from "src/comic-shared/arc/types";
 import { IComicCharacter } from "../../comic-shared/character/types";
 import { IComicPage, IComicPageCommentary } from "../../comic-shared/page/types";
 import { Setting } from "../../common/setting/service";
@@ -15,24 +16,24 @@ export const Page = {
         mediaColumn: "imageUrl",
         getFolder: () => Setting.get("comicMediaFolder"),
         getEntity: PageBasic.loadById,
-        getFileName: (page:IComicPage) => page.imageUrl,
+        getFileName: (page: IComicPage) => page.imageUrl,
     }),
-    sort: async (arcId:string, pageId: string, newIndex: string):Promise<IComicPage[]> => {
-        await reorder("comicPages", pageId, newIndex, {arcId});
-        return await PageBasic.search({arcId});
+    sort: async (arcId: string, pageId: string, newIndex: string): Promise<IComicPage[]> => {
+        await reorder("comicPages", pageId, newIndex, { arcId });
+        return await PageBasic.search({ arcId });
     },
     enableAll: async (arcId: string) => Promise.all(
-        (await PageBasic.search({arcId})).map((page) => PageBasic.update(page.id, {enabled: true, postDate: new Date().toISOString()}))
+        (await PageBasic.search({ arcId })).map((page) => PageBasic.update(page.id, { enabled: true, postDate: new Date().toISOString() }))
     ),
     disableAll: async (arcId: string) => Promise.all(
-        (await PageBasic.search({arcId})).map((page) => PageBasic.update(page.id, {enabled: false}))
+        (await PageBasic.search({ arcId })).map((page) => PageBasic.update(page.id, { enabled: false }))
     ),
     character: basicRelationService<IComicCharacter, IComicPage>("comicPageCharacters", "pageId", "comicCharacters", "characterId"),
     commentary: {
         ...CommentaryBasic,
-        sort: async (pageId:string, commentaryId: string, newIndex: string):Promise<IComicPageCommentary[]> => {
-            await reorder("comicCommentaries", commentaryId, newIndex, {pageId});
-            return await CommentaryBasic.search({pageId});
+        sort: async (pageId: string, commentaryId: string, newIndex: string): Promise<IComicPageCommentary[]> => {
+            await reorder("comicCommentaries", commentaryId, newIndex, { pageId });
+            return await CommentaryBasic.search({ pageId });
         },
     },
 }

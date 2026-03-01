@@ -1,4 +1,3 @@
-import { at } from "ts-functional";
 import { del, get, patch, post, upload } from "../../core/express/wrappers";
 import { CharacterHandler } from "./handlers";
 
@@ -38,6 +37,9 @@ export const CharacterEndpoints = {
             },
             pages: {
                 GET: get(CharacterHandler.getPages),
+            },
+            arcs: {
+                GET: get(CharacterHandler.getArcs),
             }
         }
     }
