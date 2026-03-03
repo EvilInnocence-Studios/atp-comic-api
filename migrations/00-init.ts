@@ -13,11 +13,13 @@ const permissions = [
     { name: "comicPage.view", description: "Can view comic pages" },
     { name: "comicPage.update", description: "Can edit comic pages" },
     { name: "comicPage.delete", description: "Can delete comic pages" },
+    { name: "comicPage.disabled", description: "Can view disabled pages" },
 
     { name: "comicArc.create", description: "Can create comic arcs" },
     { name: "comicArc.view", description: "Can view comic arcs" },
     { name: "comicArc.update", description: "Can edit comic arcs" },
     { name: "comicArc.delete", description: "Can delete comic arcs" },
+    { name: "comicArc.disabled", description: "Can view disabled arcs" },
 
     { name: "comicCharacter.create", description: "Can create comic characters" },
     { name: "comicCharacter.view", description: "Can view comic characters" },

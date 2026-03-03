@@ -5,12 +5,26 @@ import { Setting } from "../../common/setting/service";
 import { basicCrudService, basicRelationService } from "../../core/express/service/common";
 import { optionalMediaService } from "../../core/express/service/media";
 import { reorder } from "../../core/express/util";
+import { IPermission } from "../../uac-shared/permissions/types";
+import { Query } from "../../core-shared/express/types";
 
 const PageBasic = basicCrudService<IComicPage>("comicPages");
 const CommentaryBasic = basicCrudService<IComicPageCommentary>("comicPageCommentaries");
 
 export const Page = {
     ...PageBasic,
+    search: async (q: Query = {}, userPermissionsPromise: Promise<IPermission[]>): Promise<IComicPage[]> => {
+        const userPermissions = await userPermissionsPromise;
+        const canViewDisabledPages = userPermissions.find(p => p.name === "comicPage.disabled");
+        const allPages = await PageBasic.search(q);
+        return allPages.filter(page =>
+            canViewDisabledPages ||
+            page.enabled && (
+                !page.postDate ||
+                new Date(page.postDate) <= new Date()
+            )
+        );
+    },
     image: optionalMediaService<IComicPage>({
         dbTable: "comicPages",
         mediaColumn: "imageUrl",
@@ -18,9 +32,9 @@ export const Page = {
         getEntity: PageBasic.loadById,
         getFileName: (page: IComicPage) => page.imageUrl,
     }),
-    sort: async (arcId: string, pageId: string, newIndex: string): Promise<IComicPage[]> => {
+    sort: async (arcId: string, pageId: string, newIndex: string, userPermissionsPromise: Promise<IPermission[]>): Promise<IComicPage[]> => {
         await reorder("comicPages", pageId, newIndex, { arcId });
-        return await PageBasic.search({ arcId });
+        return await Page.search({ arcId }, userPermissionsPromise);
     },
     enableAll: async (arcId: string) => Promise.all(
         (await PageBasic.search({ arcId })).map((page) => PageBasic.update(page.id, { enabled: true, postDate: new Date().toISOString() }))

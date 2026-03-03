@@ -1,17 +1,31 @@
+import { Query } from "@core-shared/express/types";
+import { IPermission } from "@uac-shared/permissions/types";
+import { IComicArc } from "../../comic-shared/arc/types";
+import { IComicCharacter } from "../../comic-shared/character/types";
 import { Setting } from "../../common/setting/service";
 import { basicCrudService, basicRelationService } from "../../core/express/service/common";
 import { optionalMediaService } from "../../core/express/service/media";
 import { reorder } from "../../core/express/util";
-import { IComicArc } from "../../comic-shared/arc/types";
-import { IComicCharacter } from "../../comic-shared/character/types";
 
 const ArcBasic = basicCrudService<IComicArc>("comicArcs");
 
 export const Arc = {
     ...ArcBasic,
-    sort: async (parentId: string, arcId: string, newIndex: string): Promise<IComicArc[]> => {
+    search: async (q: Query = {}, userPermissionsPromise: Promise<IPermission[]>): Promise<IComicArc[]> => {
+        const userPermissions = await userPermissionsPromise;
+        const canViewDisabledArcs = userPermissions.find(p => p.name === "comicArc.disabled");
+        const allArcs = await ArcBasic.search(q);
+        return allArcs.filter(arc =>
+            canViewDisabledArcs ||
+            arc.enabled && (
+                !arc.postDate ||
+                new Date(arc.postDate) <= new Date()
+            )
+        );
+    },
+    sort: async (parentId: string, arcId: string, newIndex: string, userPermissionsPromise: Promise<IPermission[]>): Promise<IComicArc[]> => {
         await reorder("comicArcs", arcId, newIndex, { parentId }, "sortOrder");
-        return await Arc.search({ parentId });
+        return await Arc.search({ parentId }, userPermissionsPromise);
     },
     thumbnail: optionalMediaService<IComicArc>({
         dbTable: "comicArcs",

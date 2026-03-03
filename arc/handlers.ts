@@ -1,7 +1,7 @@
 import { CheckPermissions } from "../../uac/permission/util";
 import { pipeTo } from "ts-functional";
 import { Arc } from "./services";
-import { getBody, getBodyParam, getFile, getParam } from "../../core/express/extractors";
+import { getBody, getBodyParam, getFile, getParam, getUserPermissions } from "../../core/express/extractors";
 import { IComicArc, NewComicArc } from "src/comic-shared/arc/types";
 import { HandlerArgs } from "../../core/express/types";
 import { Query } from "../../core-shared/express/types";
@@ -15,7 +15,7 @@ class ArcHandlerClass {
 
     @CheckPermissions("comicArc.view")
     public search(...args: HandlerArgs<Query>): Promise<IComicArc[]> {
-        return pipeTo(Arc.search, getBody<Query>)(args);
+        return pipeTo(Arc.search, getBody<Query>, getUserPermissions)(args);
     }
 
     @CheckPermissions("comicArc.view")
@@ -35,7 +35,7 @@ class ArcHandlerClass {
 
     @CheckPermissions("comicArc.update")
     public sort(...args: HandlerArgs<{ newIndex: string, arcId: string }>): Promise<IComicArc[]> {
-        return pipeTo(Arc.sort, getParam("arcId"), getBodyParam("childArcId"), getBodyParam("newIndex"))(args);
+        return pipeTo(Arc.sort, getParam("arcId"), getBodyParam("childArcId"), getBodyParam("newIndex"), getUserPermissions)(args);
     }
 
     @CheckPermissions("comicArc.update")
