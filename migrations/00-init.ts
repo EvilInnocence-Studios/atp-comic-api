@@ -1,9 +1,12 @@
-import { insertPermissions, insertRolePermissions, insertRoles } from "../../uac/migrations/util";
+import { insertSettings } from "@common/migrations/util";
 import { database } from "../../core/database";
 import { IMigration } from "../../core/dbMigrations";
+import { insertPermissions, insertRolePermissions } from "../../uac/migrations/util";
 import {
-    arcsTable, charactersTable, pageCharactersTable, pageCommentaryTable, pagesTable,
-    characterAttributesTable, characterMediaTable, arcCharactersTable
+    arcCharactersTable,
+    arcsTable,
+    characterAttributesTable, characterMediaTable,
+    charactersTable, pageCharactersTable, pageCommentaryTable, pagesTable
 } from "./tables";
 
 const db = database();
@@ -37,6 +40,21 @@ const rolePermissions = [
     ...permissions.filter(p => p.name.endsWith(".view")).map(p => ({ roleName: "Public", permissionName: p.name })),
 ];
 
+const settings = [
+    {key: "comicMediaFolder",                 value: "media/comics"},
+    {key: "comic.arcNames",                   value: "Series,Book,Chapter"},
+    {key: "comic.showArchiveDetails",         value: "false"},
+    {key: "comic.archivesSortOrder",          value: "desc"},
+    {key: "comic.showArchiveSortOrderToggle", value: "false"},
+    {key: "comic.archiveBreadCrumbMode",      value: "parent"},
+    {key: "comic.showArchiveViewModeToggle",  value: "false"},
+    {key: "comic.showArchiveBanner",          value: "false"},
+    {key: "comic.defaultArchiveView",         value: "list"},
+    {key: "comic.defaultArchivesSortOrder",   value: "desc"},
+    {key: "comic.ArchiveLinkLevel",           value: "0"},
+    {key: "comic.verticalScrollArcNames",     value: "Series,Season,Episode"},
+]
+
 export const init: IMigration = {
     name: "init",
     module: "comic",
@@ -64,5 +82,6 @@ export const init: IMigration = {
     initData: async () => {
         await insertPermissions(db, permissions);
         await insertRolePermissions(db, rolePermissions);
+        await insertSettings(db, settings);
     }
 }
