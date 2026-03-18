@@ -1,4 +1,4 @@
-import { insertSettings } from "@common/migrations/util";
+import { insertSettings } from "../../common/migrations/util";
 import { database } from "../../core/database";
 import { IMigration } from "../../core/dbMigrations";
 import { insertPermissions, insertRolePermissions } from "../../uac/migrations/util";
