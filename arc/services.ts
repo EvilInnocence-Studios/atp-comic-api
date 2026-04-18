@@ -7,7 +7,18 @@ import { basicCrudService, basicRelationService } from "../../core/express/servi
 import { optionalMediaService } from "../../core/express/service/media";
 import { reorder } from "../../core/express/util";
 
-const ArcBasic = basicCrudService<IComicArc>("comicArcs");
+const ArcBasic = basicCrudService<IComicArc>(
+    "comicArcs",
+    "name",
+    {
+        afterRemove: async (arc: IComicArc) => {
+            await Promise.all([
+                Arc.thumbnail.remove(arc.id),
+                Arc.banner.remove(arc.id),
+            ]);
+        }
+    }
+);
 
 export const Arc = {
     ...ArcBasic,

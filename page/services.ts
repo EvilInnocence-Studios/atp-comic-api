@@ -8,7 +8,15 @@ import { reorder } from "../../core/express/util";
 import { IPermission } from "../../uac-shared/permissions/types";
 import { Query } from "../../core-shared/express/types";
 
-const PageBasic = basicCrudService<IComicPage>("comicPages");
+const PageBasic = basicCrudService<IComicPage>(
+    "comicPages",
+    "name",
+    {
+        afterRemove: async (page: IComicPage) => {
+            await Page.image.remove(page.id);
+        }
+    }
+);
 const CommentaryBasic = basicCrudService<IComicPageCommentary>("comicPageCommentaries");
 
 export const Page = {
