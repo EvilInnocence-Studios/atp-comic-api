@@ -24,8 +24,9 @@ export const Arc = {
         );
     },
     sort: async (parentId: string, arcId: string, newIndex: string, userPermissionsPromise: Promise<IPermission[]>): Promise<IComicArc[]> => {
-        await reorder("comicArcs", arcId, newIndex, { parentId }, "sortOrder");
-        return await Arc.search({ parentId }, userPermissionsPromise);
+        const pId = parentId === "null" ? null : parentId;
+        await reorder("comicArcs", arcId, newIndex, { parentId: pId }, "sortOrder", "parentId");
+        return await Arc.search({ parentId: pId }, userPermissionsPromise);
     },
     thumbnail: optionalMediaService<IComicArc>({
         dbTable: "comicArcs",
