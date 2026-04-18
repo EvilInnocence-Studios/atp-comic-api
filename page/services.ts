@@ -33,7 +33,7 @@ export const Page = {
         getFileName: (page: IComicPage) => page.imageUrl,
     }),
     sort: async (arcId: string, pageId: string, newIndex: string, userPermissionsPromise: Promise<IPermission[]>): Promise<IComicPage[]> => {
-        await reorder("comicPages", pageId, newIndex, { arcId });
+        await reorder("comicPages", pageId, newIndex, { arcId }, "sortOrder");
         return await Page.search({ arcId }, userPermissionsPromise);
     },
     enableAll: async (arcId: string) => Promise.all(
@@ -46,7 +46,7 @@ export const Page = {
     commentary: {
         ...CommentaryBasic,
         sort: async (pageId: string, commentaryId: string, newIndex: string): Promise<IComicPageCommentary[]> => {
-            await reorder("comicCommentaries", commentaryId, newIndex, { pageId });
+            await reorder("comicPageCommentaries", commentaryId, newIndex, { pageId }, "sortOrder");
             return await CommentaryBasic.search({ pageId });
         },
     },
