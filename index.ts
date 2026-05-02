@@ -1,5 +1,5 @@
-import { init } from "./migrations/00-init";
-import { migration as addArcCharacters } from "./migrations/01-addArcCharacters";
+import { init } from "../comic/migrations/00-init";
+import { migration as addArcCharacters } from "../comic/migrations/01-addArcCharacters";
 
 export { apiConfig } from "./endpoints";
 
