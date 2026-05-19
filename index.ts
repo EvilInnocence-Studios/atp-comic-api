@@ -8,30 +8,50 @@ export const migrations = [init, addArcCharacters];
 export const setupMigrations = [init];
 
 FieldRegistry.register(
-    "comicArcs",
-    ["name", "url", "parentId", "sortOrder", "enabled", "isVerticalScroll", "thumbnailUrl", "bannerUrl", "summary", "transcript", "postDate"]
+    "comicArcs", {
+        create: ["name", "url", "parentId", "sortOrder", "enabled", "isVerticalScroll", "thumbnailUrl", "bannerUrl", "summary", "transcript", "postDate"],
+        update: ["name", "url", "parentId", "sortOrder", "enabled", "isVerticalScroll", "thumbnailUrl", "bannerUrl", "summary", "transcript", "postDate"],
+    }
 );
 FieldRegistry.register(
-    "comicCharacters",
-    ["name", "thumbnailId", "mainImageId", "enabled", "showDetails", "sortOrder", "bio"]
+    "comicCharacters", {
+        create: ["name", "thumbnailId", "mainImageId", "enabled", "showDetails", "sortOrder", "bio"],
+        update: ["name", "thumbnailId", "mainImageId", "enabled", "showDetails", "sortOrder", "bio"],
+    }
 );
 FieldRegistry.register(
-    "comicCharacterAttributes",
-    ["name", "value", "sortOrder"]
+    "comicCharacterAttributes", {
+        create: ["characterId", "name", "value", "sortOrder"],
+        update: ["name", "value", "sortOrder"],
+    }
 );
 FieldRegistry.register(
-    "comicCharacterMedia",
-    ["url", "caption", "order"]
+    "comicCharacterMedia", {
+        create: ["characterId", "url", "caption", "order"],
+        update: ["url", "caption", "order"],
+    }
 );
 FieldRegistry.register(
-    "comicPages",
-    ["name", "url", "arcId", "sortOrder", "imageUrl", "transcript", "enabled", "postDate"]
+    "comicPages", {
+        create: ["name", "url", "arcId", "sortOrder", "imageUrl", "transcript", "enabled", "postDate"],
+        update: ["name", "url", "arcId", "sortOrder", "imageUrl", "transcript", "enabled", "postDate"],
+    }
 );
 FieldRegistry.register(
-    "comicPageCharacters",
-    []
+    "comicPageCharacters", {
+        create: ["pageId", "characterId"],
+        update: [],
+    }
 );
 FieldRegistry.register(
-    "comicPageCommentaries",
-    ["title", "text", "sortOrder"]
+    "comicArcCharacters", {
+        create: ["arcId", "characterId"],
+        update: [],
+    }
+);
+FieldRegistry.register(
+    "comicPageCommentaries", {
+        create: ["title", "text", "sortOrder"],
+        update: ["title", "text", "sortOrder"],
+    }
 );
