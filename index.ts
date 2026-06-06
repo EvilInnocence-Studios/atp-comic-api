@@ -1,4 +1,4 @@
-import { FieldRegistry } from "@core/express/util";
+import { FieldRegistry } from "../core/express/util";
 import { init } from "../comic/migrations/00-init";
 import { migration as addArcCharacters } from "../comic/migrations/01-addArcCharacters";
 

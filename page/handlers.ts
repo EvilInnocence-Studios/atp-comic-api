@@ -4,9 +4,10 @@ import { IComicCharacter } from "../../comic-shared/character/types";
 import { Query } from "../../core-shared/express/types";
 import { getBody, getBodyParam, getFile, getParam, getParamsAndBody, getQueryParam, getUserPermissions } from "../../core/express/extractors";
 import { HandlerArgs } from "../../core/express/types";
+import { getPresignedUploadUrl } from "../../core/s3Uploads";
 import { CheckPermissions } from "../../uac/permission/util";
 import { Page } from "./services";
-import { getPresignedUploadUrl } from "../../core/s3Uploads";
+import { ObjectCannedACL } from "@aws-sdk/client-s3";
 
 class PageHandlerClass {
     @CheckPermissions("comicPage.view")
@@ -101,7 +102,7 @@ class PageHandlerClass {
 
     @CheckPermissions("comicPage.update")
     public getUploadUrl(...args: HandlerArgs<Query>): Promise<string> {
-        return pipeTo(getPresignedUploadUrl, getQueryParam("path"))(args);
+        return pipeTo(getPresignedUploadUrl, getQueryParam<string>("path"))(args);
     }
 }
 
