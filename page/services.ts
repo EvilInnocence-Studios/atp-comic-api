@@ -6,7 +6,12 @@ import { basicCrudService, basicRelationService } from "../../core/express/servi
 import { optionalMediaService } from "../../core/express/service/media";
 import { reorder } from "../../core/express/util";
 import { IPermission } from "../../uac-shared/permissions/types";
-import { Query } from "../../core-shared/express/types";
+import { Query, QueryArrayValue, QuerySingleValue, QueryValue } from "../../core-shared/express/types";
+import { database } from "../../core/database";
+import { objFilter } from "ts-functional";
+import { Index } from "ts-functional/dist/types";
+
+const db = database();
 
 const PageBasic = basicCrudService<IComicPage>(
     "comicPages",
@@ -21,17 +26,35 @@ const CommentaryBasic = basicCrudService<IComicPageCommentary>("comicPageComment
 
 export const Page = {
     ...PageBasic,
-    search: async (q: Query = {}, userPermissionsPromise: Promise<IPermission[]>): Promise<IComicPage[]> => {
-        const userPermissions = await userPermissionsPromise;
+    search: async ({ offset, perPage, ...query }: Query = {} as Query, userPermissionsPromise: Promise<IPermission[]> = Promise.resolve([])): Promise<IComicPage[]> => {
+        const userPermissions = (await userPermissionsPromise) || [];
         const canViewDisabledPages = userPermissions.find(p => p.name === "comicPage.disabled");
-        const allPages = await PageBasic.search(q);
-        return allPages.filter(page =>
-            canViewDisabledPages ||
-            page.enabled && (
-                !page.postDate ||
-                new Date(page.postDate) <= new Date()
-            )
-        );
+
+        const whereIn: Index<QueryArrayValue> = objFilter(
+            (value: QueryValue) => Array.isArray(value)
+        )(query) as Index<QueryArrayValue>;
+
+        const where: Index<QuerySingleValue> = objFilter(
+            (value: QueryValue) => !Array.isArray(value) && typeof value !== 'undefined'
+        )(query) as Index<QuerySingleValue>;
+
+        const stmt = db("comicPages")
+            .select("*")
+            .where(where);
+
+        Object.keys(whereIn).forEach(key => {
+            stmt.whereIn(key, whereIn[key]);
+        });
+
+        if (!canViewDisabledPages) {
+            stmt.where("enabled", true)
+                .whereNotNull("postDate")
+                .where("postDate", "<=", db.fn.now());
+        }
+
+        return stmt.orderBy("sortOrder")
+            .offset(offset || 0)
+            .limit(perPage || 999999);
     },
     image: optionalMediaService<IComicPage>({
         dbTable: "comicPages",
@@ -45,7 +68,7 @@ export const Page = {
         return await Page.search({ arcId }, userPermissionsPromise);
     },
     enableAll: async (arcId: string) => Promise.all(
-        (await PageBasic.search({ arcId })).map((page) => PageBasic.update(page.id, { enabled: true, postDate: new Date().toISOString() }))
+        (await PageBasic.search({ arcId })).map((page) => PageBasic.update(page.id, { enabled: true, postDate: new Date().toISOString().split('T')[0] }))
     ),
     disableAll: async (arcId: string) => Promise.all(
         (await PageBasic.search({ arcId })).map((page) => PageBasic.update(page.id, { enabled: false }))
