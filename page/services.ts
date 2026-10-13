@@ -10,6 +10,7 @@ import { Query, QueryArrayValue, QuerySingleValue, QueryValue } from "../../core
 import { database } from "../../core/database";
 import { objFilter } from "ts-functional";
 import { Index } from "ts-functional/dist/types";
+import { getSiteTimezone, getSiteTodayDate } from "../../../config";
 
 const db = database();
 
@@ -47,9 +48,11 @@ export const Page = {
         });
 
         if (!canViewDisabledPages) {
+            const timezone = (await Setting.get("site.timezone")) || getSiteTimezone();
+            const today = getSiteTodayDate(timezone);
             stmt.where("enabled", true)
                 .whereNotNull("postDate")
-                .where("postDate", "<=", db.fn.now());
+                .where("postDate", "<=", today);
         }
 
         return stmt.orderBy("sortOrder")
@@ -67,9 +70,13 @@ export const Page = {
         await reorder("comicPages", pageId, newIndex, { arcId }, "sortOrder");
         return await Page.search({ arcId }, userPermissionsPromise);
     },
-    enableAll: async (arcId: string) => Promise.all(
-        (await PageBasic.search({ arcId })).map((page) => PageBasic.update(page.id, { enabled: true, postDate: new Date().toISOString().split('T')[0] }))
-    ),
+    enableAll: async (arcId: string) => {
+        const timezone = (await Setting.get("site.timezone")) || getSiteTimezone();
+        const today = getSiteTodayDate(timezone);
+        return Promise.all(
+            (await PageBasic.search({ arcId })).map((page) => PageBasic.update(page.id, { enabled: true, postDate: today }))
+        );
+    },
     disableAll: async (arcId: string) => Promise.all(
         (await PageBasic.search({ arcId })).map((page) => PageBasic.update(page.id, { enabled: false }))
     ),

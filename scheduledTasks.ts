@@ -9,7 +9,7 @@ ScheduledTaskRegistry.register({
     defaultSchedule: {
         type: "cron",
         cronExpression: "0 0 * * *",
-        timezone: "UTC"
+        timezone: "America/Chicago"
     },
     defaultEnabled: true,
     run: async () => {

@@ -4,6 +4,7 @@ import { database } from "../../core/database";
 import { basicCrudService } from "../../core/express/service/common";
 import { reorder } from "../../core/express/util";
 import { IFile, removeMedia, uploadMedia } from "../../core/s3Uploads";
+import { getSiteTodayDate } from "../../../config";
 
 const db = database();
 
@@ -14,19 +15,25 @@ const mediaFolder = () => Setting.get("comicMediaFolder");
 export const Character = {
     ...CharacterBasic,
     pages: (characterId: string): Promise<string[]> => {
+        const today = getSiteTodayDate();
         return db("comicPages")
             .join("comicPageCharacters", "comicPages.id", "comicPageCharacters.pageId")
             .where("comicPageCharacters.characterId", characterId)
             .where("comicPages.enabled", true)
+            .whereNotNull("comicPages.postDate")
+            .where("comicPages.postDate", "<=", today)
             .select("comicPages.id as id")
             .orderBy("comicPages.sortOrder", "asc")
             .then(rows => rows.map(r => r.id));
     },
     arcs: (characterId: string): Promise<string[]> => {
+        const today = getSiteTodayDate();
         return db("comicArcs")
             .join("comicArcCharacters", "comicArcs.id", "comicArcCharacters.arcId")
             .where("comicArcCharacters.characterId", characterId)
             .where("comicArcs.enabled", true)
+            .whereNotNull("comicArcs.postDate")
+            .where("comicArcs.postDate", "<=", today)
             .select("comicArcs.id as id")
             .orderBy("comicArcs.sortOrder", "asc")
             .then(rows => rows.map(r => r.id));

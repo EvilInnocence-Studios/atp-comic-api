@@ -9,6 +9,7 @@ import { reorder } from "../../core/express/util";
 import { database } from "../../core/database";
 import { objFilter } from "ts-functional";
 import { Index } from "ts-functional/dist/types";
+import { getSiteTimezone, getSiteTodayDate } from "../../../config";
 
 const db = database();
 
@@ -48,9 +49,11 @@ export const Arc = {
         });
 
         if (!canViewDisabledArcs) {
+            const timezone = (await Setting.get("site.timezone")) || getSiteTimezone();
+            const today = getSiteTodayDate(timezone);
             stmt.where("enabled", true)
                 .whereNotNull("postDate")
-                .where("postDate", "<=", db.fn.now());
+                .where("postDate", "<=", today);
         }
 
         return stmt.orderBy("sortOrder")
