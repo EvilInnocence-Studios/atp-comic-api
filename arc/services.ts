@@ -9,7 +9,7 @@ import { reorder } from "../../core/express/util";
 import { database } from "../../core/database";
 import { objFilter } from "ts-functional";
 import { Index } from "ts-functional/dist/types";
-import { getSiteTimezone, getSiteTodayDate } from "../../../config";
+import { getSiteTimezone, getSiteTodayDate } from "../../core/config";
 
 const db = database();
 

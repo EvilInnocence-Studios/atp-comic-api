@@ -4,7 +4,7 @@ import { database } from "../../core/database";
 import { basicCrudService } from "../../core/express/service/common";
 import { reorder } from "../../core/express/util";
 import { IFile, removeMedia, uploadMedia } from "../../core/s3Uploads";
-import { getSiteTodayDate } from "../../../config";
+import { getSiteTodayDate } from "../../core/config";
 
 const db = database();
 
